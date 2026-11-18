@@ -138,8 +138,10 @@ function(COMPILE_TO_WASM SOURCE_FILE)
         LINKER:--shared-memory
         # LINKER:--import-memory
         # LINKER:--export-memory
-        # メモリサイズを大幅に増加
-        LINKER:--initial-memory=1073741824,--max-memory=1073741824
+        # 初期メモリは 64 MiB、最大は 512 MiB（必要な分だけ増える）。
+        # 初期を 1 GiB にすると C/R で毎回 1 GiB を書き出す。
+        # 最大を 1 GiB にすると chiwawa（共有メモリを最大の大きさで確保する）の既定の上限に収まらない
+        LINKER:--initial-memory=67108864,--max-memory=536870912
         LINKER:-zstack-size=6553600
 
         LINKER:--no-check-features
